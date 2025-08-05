@@ -12,6 +12,12 @@
       padding: 20px;
       font-size: 1.5em;
     }
+    .can{
+      color:green;
+    }
+    .cant{
+      color:red;
+    }
   </style>
   <script src="https://unpkg.com/vue@3.4.0"></script>
 </head>
@@ -19,8 +25,17 @@
 <body>
   <div id="app">
     <div>
+      <div>
+        <label>Enter your age:</label>
+        <input v-model="age">
+      </div>
       <div>{{message}}</div>
-      <div>Can you drive: {{canDrive}}</div>
+      <div>
+        Can you drive: 
+        <span :class="{'can':canDrive=== 'Yes', 'cant':canDrive === 'No'}">
+          {{canDrive}}
+        </span>
+      </div>
     </div>
   </div>
   <script>
@@ -47,7 +62,8 @@
 
         return{
           message,
-          canDrive
+          canDrive,
+          age
         }
       },
     };
