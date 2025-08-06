@@ -40,24 +40,30 @@
                 let question = ref("What is 5+8");
                 let input = ref(null);
                 let answer = ref(null);
-                let scoreval = ref(null)
+                let initscore = 0;
                 let score = computed(
                     () => {
                         console.log("Processed!")
                         return String(input.value) == answer ? "Correct":"Incorrect"
                     }
                 )
-                scoreval = 0
+                let scoreval = ref(0);
                 
                 
                 answer = "13"
-
+                if (score == "Correct") {
+                    () => {
+                        console.log("Increment!")
+                        return initscore++
+                    }
+                }
                 setTimeout(
                     () => {
                         console.log("Changed to Quesiton 2!")
                         question.value = 'What is the capital of Sweden?';
                         answer = "Stockholm"
                         input.value = ""
+
                     },
                     5000
                 
@@ -76,7 +82,7 @@
                 setTimeout(
                     () => {
                         console.log("Finished!")
-                        question.value = `Your score is: ${scoreval}`
+                        question.value = `Your score is: ${initscore}`
                         input.value = ""
 
                     },
@@ -89,7 +95,8 @@
                     answer,
                     input,
                     score,
-                    scoreval
+                    scoreval,
+                    initscore
                 }
 
             }
