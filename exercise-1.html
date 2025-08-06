@@ -11,19 +11,86 @@
             font-size:2em;
             text-align:center;
         }
+
+        .correct{
+            color:green
+        }
+        .incorrect{
+            color:white
+        }
     </style>
     <script src="https://unpkg.com/vue@3.4.0"></script>
 </head>
 <body>
     <div id="app">
-        <h1>This is the Test</h1>
-        <body>What is 5+8</body><br>
+        <div>
+            <h1>This is the Test</h1>
+            {{question}} <br><br>
+            <input v-model="input"><br><br>
+            <span :class="{'incorrect':score=== 'Incorrect', 'correct':score === 'Correct'}">
+                {{score}}
+            </span>
+        </div>
     </div>
 
     <script>
         const { createApp, ref, computed} = Vue;
         const App = {
             setup() {
+                let question = ref("What is 5+8");
+                let input = ref(null);
+                let answer = ref(null);
+                let scoreval = ref(null)
+                let score = computed(
+                    () => {
+                        console.log("Processed!")
+                        return String(input.value) == answer ? "Correct":"Incorrect"
+                    }
+                )
+                scoreval = 0
+                
+                
+                answer = "13"
+
+                setTimeout(
+                    () => {
+                        console.log("Changed to Quesiton 2!")
+                        question.value = 'What is the capital of Sweden?';
+                        answer = "Stockholm"
+                        input.value = ""
+                    },
+                    5000
+                
+                )
+
+                setTimeout(
+                    () => {
+                        console.log("Changed to Question 3!")
+                        question.value = 'How many disciples were there?'
+                        answer = "12"
+                        input.value = ""
+                    },
+                    10000
+                )
+
+                setTimeout(
+                    () => {
+                        console.log("Finished!")
+                        question.value = `Your score is: ${scoreval}`
+                        input.value = ""
+
+                    },
+                    15000
+                    
+                )
+
+                return{
+                    question,
+                    answer,
+                    input,
+                    score,
+                    scoreval
+                }
 
             }
         }
