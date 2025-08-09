@@ -10,17 +10,20 @@
 <body>
     <div id="app">
         <input placeholder="Please Enter Image URL" v-model="imagesrc">
-        <button @click="imagesrc = ''">Add Photo</button>
+        <button @click="imageurl = imagesrc">Add Photo</button><br><br>
+        <img :src="imageurl" width="250px">
     </div>
     <script>
         const {createApp, ref, computed} = Vue;
         const App = {
             setup() {
-                let imagesrc = ref("")
+                let imagesrc = ref(null)
+                let imageurl = ref(null)  
 
 
                 return{
-                    imagesrc
+                    imagesrc,
+                    imageurl
                 }
             }
 
