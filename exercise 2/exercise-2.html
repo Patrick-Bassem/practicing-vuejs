@@ -76,7 +76,7 @@
         
 
         <!-- An image goes here -->
-        <button class="favorite-button" @active="">
+        <button :class="['favorite-button', { active: isFavorite }]" @click="toggleFavorite(photo)">
           ★
         </button>
       </div>
@@ -91,13 +91,13 @@
         // We need a ref for the currently entered URL
         const photos = ref([])
         const newPhotoUrl = ref('');
+        let isFavorite = false
         const addPhoto = () => {
           console.log("I was clicked!")
 
           const photo = {
             id: photos.value.length +1,
             url: newPhotoUrl.value,
-            isFavorite: false
           };
           if (newPhotoUrl.value!== '') {
             photos.value.push(photo);
@@ -105,12 +105,15 @@
           }
         };
         const toggleFavorite = () => {
-          // Favorite toggling logic
+          this.isFavorite = !this.isFavorite
+
+
         };
 
         return {
           addPhoto,
-          photos, newPhotoUrl
+          photos, newPhotoUrl,
+          isFavorite, toggleFavorite
 
         }
       },
