@@ -62,7 +62,7 @@
         <input
           ref="newTaskInput"
           placeholder="Add new task"
-          v-model="NewTask"
+          v-model="newTask"
         />
         <select v-model="newPriority">
           <option disabled value="">Select priority</option>
@@ -85,7 +85,7 @@
         <h3>Your Tasks</h3>
         <!-- This is a list of tasks -->
         <div
-          v-for="task in tasks"
+          v-for="task, index in tasks"
           :key="task.id"
           :class="{task: true, completed: task.done, [task.priority.toLowerCase()]:true}"
         >
@@ -96,34 +96,27 @@
             <span>{{task.description}}</span>
           </div>
           <!-- Removing a task -->
-          <button class="remove-button">✖</button>
+          <button class="remove-button" @click="removeTask(index)">✖</button>
         </div>
       </div>
     </div>
 
     <script>
-      const { createApp, onMounted, onBeforeMount, ref } = Vue;
+      const { createApp, onMounted, onBeforeMount, ref, watch, computed } = Vue;
 
       const App = {
         setup() {
           const newTaskInput = ref(null);
-          const NewTask = ref("");
+          const newTask = ref("");
           const newPriority = ref("");
-          const tasks = ref([
-            {
-              id: 1,
-              description: "Buy groceries",
-              priority: "Low",
-              done: false,
-            },
-          ]);
+          const tasks = ref(JSON.parse(localStorage.getItem("tasks") ?? "[]"));
           onMounted(() => {
             newTaskInput.value.focus();
           });
           const addTask = () => {
             if (newTask.value !== "" && newPriority.value !== "") {
-              tasks.value.push({
-                id: task.value.length + 1,
+              tasks.value.unshift({
+                id: tasks.value.length + 1,
                 description: newTask.value,
                 priority: newPriority.value,
                 done: false,
@@ -133,12 +126,29 @@
             }
           };
 
+          const removeTask = (index) => {
+            tasks.value.splice(index, 1);
+          };
+
+          // watch(newTask, (newValue, oldValue) => {
+          //   console.log(`New value is ${newValue}, old was ${oldValue}`);
+          // });
+
+          watch(
+            tasks,
+            () => {
+              localStorage.setItem("tasks", JSON.stringify(tasks.value));
+            },
+            { deep: true }
+          );
+
           return {
             newTaskInput,
             tasks,
-            NewTask,
+            newTask,
             newPriority,
             addTask,
+            removeTask,
           };
         },
       };
