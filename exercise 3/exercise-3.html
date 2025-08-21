@@ -74,7 +74,7 @@
       </form>
 
       <!-- Task filtering -->
-      <input placeholder="Filter tasks..." />
+      <input placeholder="Filter tasks..." v-model="filterText" />
 
       <!-- If there no tasks -->
       <div v-if="tasks.length===0">
@@ -85,7 +85,7 @@
         <h3>Your Tasks</h3>
         <!-- This is a list of tasks -->
         <div
-          v-for="task, index in tasks"
+          v-for="(task, index) in filteredTasks"
           :key="task.id"
           :class="{task: true, completed: task.done, [task.priority.toLowerCase()]:true}"
         >
@@ -126,13 +126,18 @@
             }
           };
 
+          const filterText = ref("");
+          const filteredTasks = computed(() =>
+            tasks.value.filter((task) =>
+              task.description
+                .toLowerCase()
+                .includes(filterText.value.toLowerCase())
+            )
+          );
+
           const removeTask = (index) => {
             tasks.value.splice(index, 1);
           };
-
-          // watch(newTask, (newValue, oldValue) => {
-          //   console.log(`New value is ${newValue}, old was ${oldValue}`);
-          // });
 
           watch(
             tasks,
@@ -149,6 +154,8 @@
             newPriority,
             addTask,
             removeTask,
+            filteredTasks,
+            filterText,
           };
         },
       };
